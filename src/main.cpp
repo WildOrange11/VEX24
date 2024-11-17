@@ -6,12 +6,13 @@ using namespace vex;
 brain B;
 
 motor chain = motor(PORT1, ratio18_1);
-motor RMotor1 = motor(PORT2, ratio6_1);
-motor RMotor2 = motor(PORT3, ratio6_1);
-motor RMotor3 = motor(PORT4, ratio6_1);
-motor LMotor1 = motor(PORT5, ratio6_1);
-motor LMotor2 = motor(PORT6, ratio6_1);
-motor LMotor3 = motor(PORT7, ratio6_1);
+motor LMotor1 = motor(PORT2, ratio6_1);
+motor LMotor2 = motor(PORT3, ratio6_1);
+motor LMotor3 = motor(PORT4, ratio6_1);
+motor RMotor1 = motor(PORT5, ratio6_1);
+motor RMotor2 = motor(PORT6, ratio6_1);
+motor RMotor3 = motor(PORT7, ratio6_1);
+motor intake = motor(PORT9, ratio18_1);
 
 digital_out goal1 = digital_out(B.ThreeWirePort.A);
 
@@ -93,6 +94,7 @@ void pre_auton(void)
 
 void autonomous(void)
 {
+  intake.spin(forward);
   setSpeed(80, 80); // Pick up the first ring
   move(400);
   PickRing();
@@ -115,6 +117,7 @@ void usercontrol(void)
 {
   while (1)
   {
+    intake.spin(forward);
     fbpos = (C1.Axis2.position() + C2.Axis2.position()) / 2;
     lrpos = (C1.Axis1.position() + C2.Axis1.position()) / 2;
     armpos = C1.Axis3.position();
@@ -182,7 +185,7 @@ void usercontrol(void)
   }
 }
 
-void main()
+int main()
 {
   // Run the pre-autonomous function.
   pre_auton();
