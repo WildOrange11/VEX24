@@ -55,15 +55,7 @@ void PlaceGoal()
   goal1.set(true);
 }
 
-void go(directionType d = forward)
-{
-  LMotor1.spin(d);
-  LMotor2.spin(d);
-  LMotor3.spin(d);
-  RMotor1.spin(d);
-  RMotor2.spin(d);
-  RMotor3.spin(d);
-}
+
 
 void pre_auton(void)
 {
