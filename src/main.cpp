@@ -147,6 +147,7 @@ void usercontrol(void)
     else if (lrpos < 0)
     {
       setSpeed(75, 25);
+      go()
     }
     else
     {
