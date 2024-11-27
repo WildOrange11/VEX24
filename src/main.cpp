@@ -81,7 +81,7 @@ void go(directionType d = forward)
 
 void pre_auton(void)
 {
-  chain.setVelocity(100, percent);
+  chain.setVelocity(-100, percent);
   setSpeed(80, 80);
   LMotor1.setPosition(0, deg);
   LMotor2.setPosition(0, deg);
@@ -118,9 +118,9 @@ void usercontrol(void)
   while (1)
   {
     intake.spin(forward);
-    fbpos = (C1.Axis2.position() + C2.Axis2.position()) / 2;
+    fbpos = (C1.Axis3.position() + C2.Axis3.position()) / 2;
     lrpos = (C1.Axis1.position() + C2.Axis1.position()) / 2;
-    armpos = C1.Axis3.position();
+
     if (fbpos > 10)
     {
       go();
@@ -153,15 +153,10 @@ void usercontrol(void)
       setSpeed(80, 80);
     }
 
-    if (armpos > 10)
+    if (C1.ButtonL2.pressing())
     {
       chain.spin(forward);
     }
-    else if (armpos < -10)
-    {
-      chain.spin(reverse);
-    }
-    else
     {
       chain.stop();
     }
