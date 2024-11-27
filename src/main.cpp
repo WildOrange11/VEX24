@@ -41,6 +41,7 @@ void setSpeed(int lv, int rv)
 void PickRing()
 {
   chain.spinFor(d1, deg);
+  intake.spinFor(d1, deg);
 }
 
 void PickGoal()
@@ -51,7 +52,9 @@ void PickGoal()
 void DropRing()
 {
   goal1.set(false);
+  intake.spinFor(1000,deg);
   chain.spinFor(-1000, deg);
+  
 }
 
 void PlaceGoal()
@@ -95,9 +98,9 @@ void pre_auton(void)
 void autonomous(void)
 {
   intake.spin(forward);
-  setSpeed(80, 80); // Pick up the first ring
+  setSpeed(80, 80);
   move(400);
-  PickRing();
+  PickRing();        // Pick up the first ring
   setSpeed(50, -50); // Turn right 45 deg
   move(100);
   wait(0.5, sec);
@@ -147,7 +150,7 @@ void usercontrol(void)
     else if (lrpos < 0)
     {
       setSpeed(75, 25);
-      go()
+      go();
     }
     else
     {
@@ -157,6 +160,7 @@ void usercontrol(void)
     if (C1.ButtonL2.pressing())
     {
       chain.spin(forward);
+      intake.spin(forward);
     }
     {
       chain.stop();
@@ -164,6 +168,7 @@ void usercontrol(void)
     if (C1.ButtonR1.pressing())
     {
       chain.spin(forward);
+      intake.spin(forward);
     }
     else
     {
