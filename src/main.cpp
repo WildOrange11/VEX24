@@ -27,7 +27,6 @@ controller C2;
 int fbpos = 0;
 int lrpos = 0;
 int armpos = 0;
-int inpos = 0;
 int f1 = 800;
 int d2 = 6;
 
@@ -56,16 +55,6 @@ void PlaceGoal()
   goal1.set(true);
 }
 
-void move(int l = 0)
-{
-  LMotor1.spinFor(l, deg, false);
-  LMotor2.spinFor(l, deg, false);
-  LMotor3.spinFor(l, deg, false);
-  RMotor1.spinFor(l, deg, false);
-  RMotor2.spinFor(l, deg, false);
-  RMotor3.spinFor(l, deg);
-}
-
 void go(directionType d = forward)
 {
   LMotor1.spin(d);
@@ -79,22 +68,18 @@ void go(directionType d = forward)
 void pre_auton(void)
 {
   chain.setVelocity(-100, percent);
-  intake.spin();
+  intake.spin(forward);
 }
 
 void autonomous(void)
 {
-  d1.driveFor(4,sec);
+  d1.driveFor(18, inches, true);
   PickRing(); // Pick up the first ring
-  move(100);
   wait(0.5, sec);
-  move(500);
   wait(0.5, sec);
   PickGoal();
-  move(100);
   PickRing();
   PickRing();
-  move(-200);
   PlaceGoal();
 }
 
@@ -106,64 +91,52 @@ void usercontrol(void)
     lrpos = C1.Axis1.position();
     if (fbpos > 10)
     {
-      go();
+      d1.drive(forward);
     }
-    else if (fbpos < -10)
+    else if (fbpos < 10)
     {
-      go(reverse);
+      d1.drive(reverse);
     }
-    else
+    else if (-10 < lrpos < 10)
     {
-      LMotor1.stop();
-      LMotor2.stop();
-      LMotor3.stop();
-      RMotor1.stop();
-      RMotor2.stop();
-      RMotor3.stop();
+      d1.stop();
     }
-
-    if (lrpos > 0)
+    if (lrpos > 10)
     {
-      setSpeed(25, 75);
-      go();
+      d1.turnFor(left, 2, deg);
     }
-    else if (lrpos < 0)
+    else if (lrpos < -10)
     {
-      setSpeed(75, 25);
-      go();
+      d1.turnFor(right, 2, deg);
     }
-    else
-    {
-      setSpeed(80, 80);
-    }
-
-    if (C1.ButtonL2.pressing())
-    {
-      chain.spin(forward);
-      intake.spin(forward);
-    }
-    {
-      chain.stop();
-    }
-    if (C1.ButtonR1.pressing())
-    {
-      chain.spin(forward);
-      intake.spin(forward);
-    }
-    else
-    {
-      chain.stop();
-    }
-    if (C1.ButtonR2.pressing() || C2.ButtonR2.pressing())
-    {
-      goal1.set(false);
-    }
-    if (C1.ButtonL2.pressing() || C2.ButtonR2.pressing())
-    {
-      goal1.set(true);
-    }
-    wait(0.2, sec);
   }
+
+  if (C1.ButtonL2.pressing())
+  {
+    chain.spin(forward);
+    intake.spin(forward);
+  }
+  {
+    chain.stop();
+  }
+  if (C1.ButtonR1.pressing())
+  {
+    chain.spin(forward);
+    intake.spin(forward);
+  }
+  else
+  {
+    chain.stop();
+  }
+  if (C1.ButtonR2.pressing() || C2.ButtonR2.pressing())
+  {
+    goal1.set(false);
+  }
+  if (C1.ButtonL2.pressing() || C2.ButtonR2.pressing())
+  {
+    goal1.set(true);
+  }
+  wait(0.2, sec);
 }
 
 int main()
