@@ -14,6 +14,11 @@ motor RMotor2 = motor(PORT6, ratio6_1);
 motor RMotor3 = motor(PORT7, ratio6_1);
 motor intake = motor(PORT9, ratio18_1);
 
+motor_group L1 = motor_group(LMotor1, LMotor2, LMotor3);
+motor_group R1 = motor_group(RMotor1, RMotor2, RMotor3);
+
+drivetrain d1 = drivetrain(L1, R1);
+
 digital_out goal1 = digital_out(B.ThreeWirePort.A);
 
 controller C1;
@@ -23,25 +28,15 @@ int fbpos = 0;
 int lrpos = 0;
 int armpos = 0;
 int inpos = 0;
-int d1 = 800;
+int f1 = 800;
 int d2 = 6;
 
 competition Competition;
 
-void setSpeed(int lv, int rv)
-{
-  LMotor1.setVelocity(-lv, percent);
-  LMotor2.setVelocity(-lv, percent);
-  LMotor3.setVelocity(-lv, percent);
-  RMotor1.setVelocity(-rv, percent);
-  RMotor2.setVelocity(-rv, percent);
-  RMotor3.setVelocity(-rv, percent);
-}
-
 void PickRing()
 {
-  chain.spinFor(d1, deg);
-  intake.spinFor(d1, deg);
+  chain.spin(forward);
+  intake.spin(forward);
 }
 
 void PickGoal()
@@ -52,9 +47,8 @@ void PickGoal()
 void DropRing()
 {
   goal1.set(false);
-  intake.spinFor(1000,deg);
+  intake.spinFor(1000, deg);
   chain.spinFor(-1000, deg);
-  
 }
 
 void PlaceGoal()
@@ -85,30 +79,18 @@ void go(directionType d = forward)
 void pre_auton(void)
 {
   chain.setVelocity(-100, percent);
-  setSpeed(80, 80);
-  LMotor1.setPosition(0, deg);
-  LMotor2.setPosition(0, deg);
-  LMotor3.setPosition(0, deg);
-  RMotor1.setPosition(0, deg);
-  RMotor2.setPosition(0, deg);
-  RMotor3.setPosition(0, deg);
-  chain.setPosition(0, deg);
+  intake.spin();
 }
 
 void autonomous(void)
 {
-  intake.spin(forward);
-  setSpeed(80, 80);
-  move(400);
-  PickRing();        // Pick up the first ring
-  setSpeed(50, -50); // Turn right 45 deg
+  d1.driveFor(4,sec);
+  PickRing(); // Pick up the first ring
   move(100);
   wait(0.5, sec);
-  setSpeed(80, 80);
   move(500);
   wait(0.5, sec);
   PickGoal();
-  setSpeed(50, -50); // Turn right 45 deg
   move(100);
   PickRing();
   PickRing();
@@ -120,10 +102,8 @@ void usercontrol(void)
 {
   while (1)
   {
-    intake.spin(forward);
-    fbpos = (C1.Axis3.position() + C2.Axis3.position()) / 2;
-    lrpos = (C1.Axis1.position() + C2.Axis1.position()) / 2;
-
+    fbpos = C1.Axis3.position();
+    lrpos = C1.Axis1.position();
     if (fbpos > 10)
     {
       go();
