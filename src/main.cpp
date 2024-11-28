@@ -22,7 +22,6 @@ drivetrain d1 = drivetrain(L1, R1);
 digital_out goal1 = digital_out(B.ThreeWirePort.A);
 
 controller C1;
-controller C2;
 
 int fbpos = 0;
 int lrpos = 0;
@@ -57,17 +56,17 @@ void PlaceGoal()
 
 void pre_auton(void)
 {
-  chain.setVelocity(-100, percent);
+  chain.setVelocity(100, percent);
+  intake.setVelocity(100, percent);
+  L1.setVelocity(80,percent);
+  R1.setVelocity(80,percent);
   intake.spin(forward);
 }
 
 void autonomous(void)
 {
   /*
-  Red team:
-  Go forward
-  Pick up same ring
-  Go to mobile goal(turn right, go forward, turn left)
+  
   */
 }
 
@@ -87,7 +86,7 @@ void usercontrol(void)
     }
     else if (-10 < lrpos < 10)
     {
-      d1.stop();
+      d1.stop(); //Stop only if the left-right axis is not pressed
     }
     if (lrpos > 10)
     {
@@ -108,11 +107,11 @@ void usercontrol(void)
   {
     chain.stop();
   }
-  if (C1.ButtonR2.pressing() || C2.ButtonR2.pressing())
+  if (C1.ButtonR2.pressing())
   {
     goal1.set(false);
   }
-  if (C1.ButtonL2.pressing() || C2.ButtonR2.pressing())
+  else
   {
     goal1.set(true);
   }
