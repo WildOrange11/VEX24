@@ -55,8 +55,6 @@ void PlaceGoal()
   goal1.set(true);
 }
 
-
-
 void pre_auton(void)
 {
   chain.setVelocity(-100, percent);
@@ -65,14 +63,12 @@ void pre_auton(void)
 
 void autonomous(void)
 {
-  d1.driveFor(18, inches, true);
-  PickRing(); // Pick up the first ring
-  wait(0.5, sec);
-  wait(0.5, sec);
-  PickGoal();
-  PickRing();
-  PickRing();
-  PlaceGoal();
+  /*
+  Red team:
+  Go forward
+  Pick up same ring
+  Go to mobile goal(turn right, go forward, turn left)
+  */
 }
 
 void usercontrol(void)
@@ -85,7 +81,7 @@ void usercontrol(void)
     {
       d1.drive(forward);
     }
-    else if (fbpos < 10)
+    else if (fbpos < -10)
     {
       d1.drive(reverse);
     }
@@ -104,14 +100,6 @@ void usercontrol(void)
   }
 
   if (C1.ButtonL2.pressing())
-  {
-    chain.spin(forward);
-    intake.spin(forward);
-  }
-  {
-    chain.stop();
-  }
-  if (C1.ButtonR1.pressing())
   {
     chain.spin(forward);
     intake.spin(forward);
