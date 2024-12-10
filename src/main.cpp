@@ -6,7 +6,7 @@ using namespace vex;
 brain B;
 
 motor chain = motor(PORT1, ratio18_1);
-motor LMotor1 = motor(PORT2, ratio6_1);
+motor LMotor1 = motor(PORT2, ratio6_1); //For these motors - Add "reverse" if necessary
 motor LMotor2 = motor(PORT3, ratio6_1);
 motor LMotor3 = motor(PORT4, ratio6_1);
 motor RMotor1 = motor(PORT5, ratio6_1);
@@ -17,7 +17,7 @@ motor intake = motor(PORT9, ratio18_1);
 motor_group L1 = motor_group(LMotor1, LMotor2, LMotor3);
 motor_group R1 = motor_group(RMotor1, RMotor2, RMotor3);
 
-drivetrain d1 = drivetrain(L1, R1);
+drivetrain d1 = drivetrain(L1, R1, 260, 400, 390);
 
 digital_out goal1 = digital_out(B.ThreeWirePort.A);
 
@@ -70,7 +70,7 @@ void autonomous(void)
   //Code for red alliance, right side
   chain.spinFor(5,sec);
   d1.driveFor(18,inches);
-  d1.turn(90,deg);
+  d1.turnFor(90,deg);
 
 
 }
