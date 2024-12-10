@@ -27,7 +27,7 @@ int fbpos = 0;
 int lrpos = 0;
 int armpos = 0;
 int f1 = 800;
-int d2 = 6;
+int f2 = 6;
 
 competition Competition;
 
@@ -58,25 +58,29 @@ void pre_auton(void)
 {
   chain.setVelocity(100, percent);
   intake.setVelocity(100, percent);
-  L1.setVelocity(80,percent);
-  R1.setVelocity(80,percent);
+  L1.setVelocity(100,percent);
+  R1.setVelocity(100,percent);
   intake.spin(forward);
 }
 
 void autonomous(void)
 {
-  /*
+  //There are 4 possible starting positions of the robot. The robot will always be placed so that the center of the robot is on the starting line...
   
-  */
-}
+  //Code for red alliance, right side
+  chain.spinFor(5,sec);
+  d1.driveFor(18,inches);
+  d1.turn(90,deg);
 
+
+}
 void usercontrol(void)
 {
   while (1)
   {
     fbpos = C1.Axis3.position();
     lrpos = C1.Axis1.position();
-    if (fbpos > 10)
+    if (fbpos > 10 and -10 < lrpos < 10)
     {
       d1.drive(forward);
     }
